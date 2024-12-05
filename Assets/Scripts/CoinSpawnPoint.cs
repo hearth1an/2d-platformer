@@ -5,7 +5,6 @@ using UnityEngine;
 public class CoinSpawnPoint : MonoBehaviour
 {
     [SerializeField] private Coin _coin;
-    [SerializeField] private CoinCounter _coinManager;
 
     private Coin _currentCoin;
 
@@ -20,20 +19,18 @@ public class CoinSpawnPoint : MonoBehaviour
         _sleepTime = new WaitForSeconds(_spawnRate);
         _rotation = transform.rotation;
         _position = transform.position;
-        SpawnCoin();        
+
+        SpawnCoin();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && _currentCoin != null)
+        if (collision.TryGetComponent<PlayerController>(out var player) && _currentCoin != null)
         {
             Destroy(_currentCoin.gameObject);
-            _currentCoin = null;
-
-            _coinManager.Add();
 
             StartCoroutine(Respawn());
-        }        
+        }
     }
 
     private void SpawnCoin()

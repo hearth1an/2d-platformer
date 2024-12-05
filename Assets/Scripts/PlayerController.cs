@@ -10,19 +10,22 @@ public class PlayerController : MonoBehaviour
     private float _horizontal;
     private float _movementSpeed = 8f;
     private float _jumpPower = 20f;
-    private bool _isFacingRight = true;    
+    private bool _isFacingRight = true;
+
+    private const string Speed = nameof(Speed);
+    private const string IsJumping = nameof(IsJumping);
 
     private void Update()
     {
         _horizontal = Input.GetAxisRaw("Horizontal");
 
-        _animator.SetFloat("Speed", Mathf.Abs(_horizontal));
-        _animator.SetBool("IsJumping", !IsGrounded());
+        _animator.SetFloat(Speed, Mathf.Abs(_horizontal));
+        _animator.SetBool(IsJumping, !IsGrounded());
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
-        {            
+        {
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _jumpPower);
-        }        
+        }
 
         Flip();
     }
@@ -36,7 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         float radius = 0.2f;
 
-        _animator.SetBool("IsJumping", false);
+        _animator.SetBool(IsJumping, false);
 
         return Physics2D.OverlapCircle(_groundCheck.position, radius, _groundLayer);
     }
@@ -53,5 +56,5 @@ public class PlayerController : MonoBehaviour
             localScale.x *= mirrorPositionValue;
             transform.localScale = localScale;
         }
-    }    
+    }
 }
