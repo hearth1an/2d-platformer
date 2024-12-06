@@ -1,12 +1,13 @@
 using UnityEngine;
 
-[RequireComponent (typeof(Rigidbody2D), typeof(Animator))]
+[RequireComponent (typeof(Rigidbody2D), typeof(Animator), typeof(PlayerInputReader))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigidBody;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Animator _animator;
+    [SerializeField] private PlayerInputReader _inputReader;
 
     private float _horizontal;
     private float _movementSpeed = 8f;
@@ -18,18 +19,17 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        _inputReader = GetComponent<PlayerInputReader>();
         _animator = GetComponent<Animator>();
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
-    {
-        _horizontal = Input.GetAxisRaw("Horizontal");
-
-        _animator.SetFloat(Speed, Mathf.Abs(_horizontal));
+    {  
+        _animator.SetFloat(Speed, Mathf.Abs(_inputReader.HorizontalInput));
         _animator.SetBool(IsJumping, !IsGrounded());
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (_inputReader.JumpInput && IsGrounded())
         {
             _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _jumpPower);
         }
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidBody.velocity = new Vector2(_horizontal * _movementSpeed, _rigidBody.velocity.y);
+        _rigidBody.velocity = new Vector2(_inputReader.HorizontalInput * _movementSpeed, _rigidBody.velocity.y);
     }
 
     private bool IsGrounded()
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
         float minValue = 0f;
         float mirrorPositionValue = -1f;
 
-        if (_isFacingRight && _horizontal < minValue || !_isFacingRight && _horizontal > minValue)
+        if (_isFacingRight && _inputReader.HorizontalInput < minValue || !_isFacingRight && _inputReader.HorizontalInput > minValue)
         {
             _isFacingRight = !_isFacingRight;
             Vector3 localScale = transform.localScale;
