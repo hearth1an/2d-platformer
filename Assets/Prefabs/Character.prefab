@@ -66,7 +66,7 @@ Transform:
   m_Children:
   - {fileID: 5534228951536154404}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1114298161763783312
 SpriteRenderer:
@@ -194,11 +194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6297336ea2d0a4d4e96814eefd5d2301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidBody: {fileID: 0}
-  _groundCheck: {fileID: 0}
+  _rigidBody: {fileID: 4355334854133309378}
+  _groundCheck: {fileID: 5534228951536154404}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _animator: {fileID: 3831211091071406214}
 --- !u!95 &3831211091071406214
 Animator:
