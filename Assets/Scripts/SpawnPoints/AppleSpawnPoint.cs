@@ -5,7 +5,7 @@ using UnityEngine;
 public class AppleSpawnPoint : MonoBehaviour
 {
     [SerializeField] private Apple _apple;
-    [SerializeField] private PlayerController _player;
+    [SerializeField] private PlayerMovingController _player;
 
     private Apple _currentApple;
 

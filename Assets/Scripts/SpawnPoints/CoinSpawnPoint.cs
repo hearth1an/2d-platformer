@@ -25,7 +25,7 @@ public class CoinSpawnPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<PlayerController>(out var player) && _currentCoin != null)
+        if (collision.TryGetComponent<PlayerMovingController>(out var player) && _currentCoin != null)
         {
             Destroy(_currentCoin.gameObject);
 

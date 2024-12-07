@@ -5,7 +5,7 @@ public class UIUpdater : MonoBehaviour
 {
     [SerializeField] private Text _text;
 
-    private const string CoinText = "Монеток: ";
+    private const string CoinText = "Coins: ";
     
     public void UpdateUi(string text)
     {
