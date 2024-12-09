@@ -4,17 +4,20 @@ public abstract class CharacterResources : MonoBehaviour
 {
     [SerializeField] private int _health = 100;
     [SerializeField] private HealthBar _healthBar;
-
-    private int _minHealth = 0;
+    [SerializeField] private SliderHandler _sliderHanndler;
+    
     public int Health => _health;
     public int MaxHealth { get; protected set; } = 100;
     public int Damage { get; protected set; } = 25;
-    public bool IsDead => _health == _minHealth;
+
+    public int MinHealth { get; protected set; } = 0;
+    public bool IsDead => _health == MinHealth;
 
     public virtual void TakeDamage(int damage)
     {   
-        _health = Mathf.Max(_health - damage, _minHealth);
+        _health = Mathf.Max(_health - damage, MinHealth);
         _healthBar.UpdateUI();
+        _sliderHanndler.ChangeValue(_health);
 
         if (IsDead)
         {
@@ -29,6 +32,7 @@ public abstract class CharacterResources : MonoBehaviour
 
         _health = Mathf.Min(_health + value, MaxHealth);
         _healthBar.UpdateUI();
+        _sliderHanndler.ChangeValue(_health);
         return true;
     }
 
