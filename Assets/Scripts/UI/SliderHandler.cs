@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SliderHandler : MonoBehaviour
 {
     [SerializeField] private CharacterResources _resources;
+
     private float _fillTime = 1f;
 
     private Slider _slider;
