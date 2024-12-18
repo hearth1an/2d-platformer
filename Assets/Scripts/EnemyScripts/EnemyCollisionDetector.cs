@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyResources : CharacterResources
+public class EnemyCollisionDetector : CharacterResources
 {    
     private void OnTriggerEnter2D(Collider2D collision)
     {

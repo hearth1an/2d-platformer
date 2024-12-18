@@ -22,12 +22,12 @@ public class AppleSpawnPoint : MonoBehaviour
         _position = transform.position;
         SpawnApple();
 
-        Apple.AppleDestroyed += HandleAppleDestroyed;
+        _currentApple.AppleDestroyed += HandleAppleDestroyed;
     }
 
     private void OnDestroy()
     {
-        Apple.AppleDestroyed -= HandleAppleDestroyed;
+        _currentApple.AppleDestroyed -= HandleAppleDestroyed;
     }
 
     private void HandleAppleDestroyed(Apple destroyedApple)

@@ -71,7 +71,7 @@ public class VampirismAbility : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<EnemyResources>(out var enemy) && !enemy.IsDead)
+            if (hit.TryGetComponent<EnemyCollisionDetector>(out var enemy) && !enemy.IsDead)
             {
                 enemy.TakeDamage(_vamprirismValue);
                 _characterResources.TryHeal(_vamprirismValue);

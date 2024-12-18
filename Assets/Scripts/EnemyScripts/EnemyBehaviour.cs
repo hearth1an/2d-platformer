@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
-[RequireComponent(typeof(EnemyTeleporter))]
+[RequireComponent(typeof(EnemyTeleporter), typeof(EnemyPlayerTracker), typeof(EnemyCollisionDetector))]
 public class EnemyBehaviour : MonoBehaviour
 {
     [SerializeField] private List<RoutePoint> _routePoints;
@@ -11,19 +12,21 @@ public class EnemyBehaviour : MonoBehaviour
     private int _speed = 2;
     private int _currentPointIndex = 0;
     private int _direction = 1;
-    
+
     private Transform _playerTransform;
+    private EnemyPlayerTracker _playerTracker;
     private bool _isChasing = false;
 
     private void Awake()
-    {    
+    {
+        _playerTracker = GetComponent<EnemyPlayerTracker>();
         _teleporter = GetComponent<EnemyTeleporter>();
         transform.position = _routePoints[_currentPointIndex].Position;
     }
 
     private void Update()
-    {
-        if (IsPlayerInSight())
+    {     
+        if (_playerTracker.IsPlayerNear)
         {
             StartChasing();
         }
@@ -45,22 +48,11 @@ public class EnemyBehaviour : MonoBehaviour
         {
             _teleporter.StartCoroutine(_teleporter.Teleport(_routePoints[_currentPointIndex].Position));
         }
-    }   
+    }
 
-    private bool IsPlayerInSight()
+    public void GetPlayerTransform(Transform playerTransform)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _viewRadius);
-
-        foreach (var hit in hits)
-        {
-            if (hit.TryGetComponent<PlayerResources>(out var player))
-            {
-                _playerTransform = player.transform;
-                return true;
-            }
-        }
-
-        return false;
+        _playerTransform = playerTransform;
     }
 
     private void StartChasing()

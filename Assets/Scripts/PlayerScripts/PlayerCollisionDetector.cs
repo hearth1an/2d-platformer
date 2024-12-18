@@ -21,17 +21,17 @@ public class PlayerCollisionDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Coin>(out var coin))
+        if (collision.TryGetComponent<Coin>(out Coin coin))
         {
             _coinCounter.Add();
         }
 
-        if (collision.TryGetComponent<EnemyResources>(out var enemy))
+        if (collision.TryGetComponent<EnemyCollisionDetector>(out var enemy))
         {
             enemy.TakeDamage(enemy.Damage);
         }
 
-        if (collision.TryGetComponent<Apple>(out var apple))
+        if (collision.TryGetComponent<Apple>(out Apple apple))
         {
             if (_playerResources.TryHeal(apple.HealAmount))
             {
