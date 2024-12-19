@@ -5,7 +5,7 @@ using System;
 
 public class VampirismAbility : MonoBehaviour
 {
-    [SerializeField] private CharacterResources _characterResources;
+    [SerializeField] private HealthHandler _characterResources;
     [SerializeField] private PlayerInputReader _inputReader;
     [SerializeField] private SpriteRenderer _radiusSprite;
 
@@ -63,7 +63,7 @@ public class VampirismAbility : MonoBehaviour
 
     private void ApplyVampirismToEnemiesInRadius()
     {
-        if (!_isAbilityActive) return;
+        if (_isAbilityActive == false) return;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _radius);
 

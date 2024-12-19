@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyCollisionDetector : CharacterResources
+public class EnemyCollisionDetector : HealthHandler
 {    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<PlayerResources>(out var player))
+        if (collision.TryGetComponent<DeathHandler>(out var player))
         {
             player.TakeDamage(Damage);
         }

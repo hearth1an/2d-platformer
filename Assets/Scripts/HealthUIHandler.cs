@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealthUIHandler : MonoBehaviour
 {
-    [SerializeField] private CharacterResources _characterResources;
+    [SerializeField] private HealthHandler _characterResources;
     [SerializeField] private HealthBar _healthBar;
     [SerializeField] private SliderHandler _sliderHanndler;
 

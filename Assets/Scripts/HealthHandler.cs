@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(HealthUIHandler))]
-public abstract class CharacterResources : MonoBehaviour
+[RequireComponent(typeof(HealthUIHandler), typeof(DeathHandler))]
+public abstract class HealthHandler : MonoBehaviour
 {
     [SerializeField] private int _health = 100;
     
@@ -13,7 +13,10 @@ public abstract class CharacterResources : MonoBehaviour
     public int MinHealth { get; protected set; } = 0;
     public bool IsDead => _health == MinHealth;
 
+
     public event Action<int> HealthChanged;
+
+    public event Action<bool> CharacterDead;
 
     public virtual void TakeDamage(int damage)
     {   
@@ -23,7 +26,7 @@ public abstract class CharacterResources : MonoBehaviour
 
         if (IsDead)
         {
-            Die();
+            CharacterDead?.Invoke(IsDead);
         }
     }
 
@@ -37,10 +40,5 @@ public abstract class CharacterResources : MonoBehaviour
         HealthChanged?.Invoke(_health);
 
         return true;
-    }
-
-    protected virtual void Die()
-    {
-        gameObject.SetActive(false);
-    }
+    }    
 }

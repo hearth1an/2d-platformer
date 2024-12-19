@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(EnemyTeleporter), typeof(EnemyPlayerTracker), typeof(EnemyCollisionDetector))]
-public class EnemyBehaviour : MonoBehaviour
+[RequireComponent(typeof(EnemyTeleporter), typeof(EnemyPlayerTracker))]
+public class EnemyMover : MonoBehaviour
 {
     [SerializeField] private List<RoutePoint> _routePoints;
     [SerializeField] private EnemyTeleporter _teleporter;

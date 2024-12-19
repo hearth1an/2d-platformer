@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class Apple : MonoBehaviour
+public class Apple : Collectable
 {
     [SerializeField] private int _healAmount = 25;
 

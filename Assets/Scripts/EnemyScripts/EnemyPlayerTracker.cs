@@ -7,13 +7,13 @@ public class EnemyPlayerTracker : MonoBehaviour
     private float _viewRadius = 4f;
     private WaitForSeconds _rate;
     private float _checkRate = 0.1f;    
-    private EnemyBehaviour _enemyBehaviour;
+    private EnemyMover _enemyBehaviour;
 
     public bool IsPlayerNear { get; private set; } = false;
 
     private void Awake()
     {
-        _enemyBehaviour = GetComponent<EnemyBehaviour>();
+        _enemyBehaviour = GetComponent<EnemyMover>();
         _rate = new WaitForSeconds(_checkRate);
     }
 
@@ -28,7 +28,7 @@ public class EnemyPlayerTracker : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<PlayerResources>(out var player))
+            if (hit.TryGetComponent<PlayerCollisionDetector>(out var player))
             {
                 _enemyBehaviour.GetPlayerTransform(player.transform);
 

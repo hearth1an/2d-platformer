@@ -1,19 +1,19 @@
-using UnityEngine;
+using System;
 
-public class CoinCounter : MonoBehaviour
+public class CoinCounter : Collectable
 {    
-    [SerializeField] private UIUpdater _uIUpdater;
+    private int _value = 0;
 
-    private int _coinCount = 0;
+    public event Action<int> UpdateCount;
 
     private void Awake()
-    {
-        _uIUpdater.UpdateUi(_coinCount.ToString());
+    {       
+        UpdateCount?.Invoke(_value);        
     }
 
     public void Add()
     {
-        _coinCount++;
-        _uIUpdater.UpdateUi(_coinCount.ToString());
+        _value++;
+        UpdateCount?.Invoke(_value);
     }
 }

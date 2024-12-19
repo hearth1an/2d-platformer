@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCollisionDetector : MonoBehaviour
 {
     [SerializeField] private CoinCounter _coinCounter;
-    [SerializeField] private PlayerResources _playerResources;
+    [SerializeField] private HealthHandler _playerHealth;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private Transform _groundCheck;
 
@@ -21,23 +21,26 @@ public class PlayerCollisionDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Coin>(out Coin coin))
+        if (collision.TryGetComponent<Collectable>(out Collectable collectable))
         {
-            _coinCounter.Add();
+            if (collectable is Coin coin)
+            {
+                _coinCounter.Add();
+            }
+            else if (collectable is Apple apple)
+            {
+                if (_playerHealth.TryHeal(apple.HealAmount))
+                {
+                    Destroy(apple.gameObject);
+                }
+            }            
         }
 
         if (collision.TryGetComponent<EnemyCollisionDetector>(out var enemy))
         {
             enemy.TakeDamage(enemy.Damage);
         }
-
-        if (collision.TryGetComponent<Apple>(out Apple apple))
-        {
-            if (_playerResources.TryHeal(apple.HealAmount))
-            {
-                Destroy(apple.gameObject);
-            }            
-        }
+        
     }
 
     private bool IsOnGround()
@@ -54,5 +57,5 @@ public class PlayerCollisionDetector : MonoBehaviour
             IsGrounded = IsOnGround();
             yield return _wait;            
         }        
-    }
+    }    
 }
