@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using System;
+using Unity.Burst.CompilerServices;
 
 public class VampirismAbility : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class VampirismAbility : MonoBehaviour
     private bool _isCooldown = false;
     private bool _isAbilityActive = false;
 
-    public event Action<bool> AbilityActive;
+    public event Action AbilityActive;
 
     public int Duration { get; private set; } = 6;
     public float Cooldown { get; private set; } = 4;
@@ -25,11 +26,18 @@ public class VampirismAbility : MonoBehaviour
     {
         _radiusSprite.enabled = false;
         UpdateRadiusSprite();
+
+        _inputReader.AbilityPressed += Activate;
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (_inputReader.AbilityInput && !_isAbilityActive && !_isCooldown)
+        _inputReader.AbilityPressed -= Activate;
+    }
+
+    private void Activate()
+    {
+        if (_isAbilityActive == false && _isCooldown == false)
         {
             StartCoroutine(ActivateAbility());
         }
@@ -41,7 +49,7 @@ public class VampirismAbility : MonoBehaviour
         float nextDamageTime = 0f;
 
         _isAbilityActive = true;
-        AbilityActive?.Invoke(true);
+        AbilityActive?.Invoke();
 
         while (elapsedTime < Duration)
         {
@@ -66,16 +74,36 @@ public class VampirismAbility : MonoBehaviour
         if (_isAbilityActive == false) return;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _radius);
-
         _radiusSprite.enabled = true;
+
+        EnemyCollisionDetector nearestEnemy = null;
+        float shortestDistance = Mathf.Infinity;
 
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<EnemyCollisionDetector>(out var enemy) && !enemy.IsDead)
+            if (hit.TryGetComponent<EnemyCollisionDetector>(out var enemy) && enemy.IsDead == false )
             {
-                enemy.TakeDamage(_vamprirismValue);
-                _characterResources.TryHeal(_vamprirismValue);
+                float distance = Vector2.Distance(transform.position, enemy.transform.position);
+
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    nearestEnemy = enemy;
+                }
             }
+        }
+
+        if (nearestEnemy != null)
+        {
+            int limitedDamage = _vamprirismValue;
+
+            if (nearestEnemy.Health < _vamprirismValue)
+            {
+                limitedDamage = nearestEnemy.Health;
+            }
+
+            nearestEnemy.TakeDamage(limitedDamage);
+            _characterResources.TryHeal(limitedDamage);
         }
     }
 

@@ -3,36 +3,36 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(VampirismAbility))]
-public class VampirismUI : VampirismAbility
+public class VampirismUI : MonoBehaviour
 {
-    [SerializeField] private Text _text;
+    [SerializeField] private Text _text;    
 
     private const string AbilityAvailable = "Press E";
     private const string AbilityCasted = "Vampirism active";
     private const string AbilityOnCooldown = "Cooldown";
 
+    private VampirismAbility _vampirismAbility;
+
     private void Awake()
-    {        
+    {   
+        _vampirismAbility = GetComponent<VampirismAbility>();
         _text.text = AbilityAvailable;
-        AbilityActive += EnableAbility;
+        _vampirismAbility.AbilityActive += EnableAbility;
     }
 
     private void OnDestroy()
     {
-        AbilityActive -= EnableAbility;
+        _vampirismAbility.AbilityActive -= EnableAbility;
     }
 
-    private void EnableAbility(bool isActive)
+    private void EnableAbility()
     {
-        if (isActive)
-        {
-            StartCoroutine(UpdateUI());
-        }       
+        StartCoroutine(UpdateUI());
     }
 
     private IEnumerator UpdateUI()
     {
-        float duration = Duration;
+        float duration = _vampirismAbility.Duration;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -47,7 +47,7 @@ public class VampirismUI : VampirismAbility
 
     private IEnumerator CooldownUI()
     {
-        float cooldown = Cooldown;
+        float cooldown = _vampirismAbility.Cooldown;
         float elapsedTime = 0f;
 
         while (elapsedTime < cooldown)

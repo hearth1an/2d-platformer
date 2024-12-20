@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerInputReader : MonoBehaviour
@@ -6,15 +7,23 @@ public class PlayerInputReader : MonoBehaviour
     private const string Horizontal = nameof(Horizontal);
     private const string AbilityE = nameof(AbilityE);
 
-    public float HorizontalInput { get; private set; }
-    public bool JumpInput { get; private set; }
-    public bool AbilityInput { get; private set; }
+    public float HorizontalInput { get; private set; }    
 
+    public event Action JumpPressed;
+    public event Action AbilityPressed;
 
     private void Update()
-    {
-        AbilityInput = Input.GetButtonDown(AbilityE);
+    {        
         HorizontalInput = Input.GetAxisRaw(Horizontal);
-        JumpInput = Input.GetButtonDown(Jump);
+
+        if (Input.GetButtonDown(Jump))
+        {
+            JumpPressed?.Invoke();
+        }
+
+        if (Input.GetButtonDown(AbilityE))
+        {
+            AbilityPressed?.Invoke();
+        }
     }
 }

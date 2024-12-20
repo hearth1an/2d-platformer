@@ -18,17 +18,19 @@ public class PlayerMovingController : MonoBehaviour
         _inputReader = GetComponent<PlayerInputReader>();
         _collisionDetector = GetComponent<PlayerCollisionDetector>();
         _rigidBody = GetComponent<Rigidbody2D>();
+
+        _inputReader.JumpPressed += Jump;
+    }
+
+    private void OnDestroy()
+    {
+        _inputReader.JumpPressed -= Jump;
     }
 
     private void Update()
     {
         _playerAnimController.TriggerRun(_inputReader.HorizontalInput);
-        _playerAnimController.TriggerJump(!_collisionDetector.IsGrounded);
-
-        if (_inputReader.JumpInput && _collisionDetector.IsGrounded)
-        {
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _jumpPower);
-        }
+        _playerAnimController.TriggerJump(_collisionDetector.IsGrounded == false);
 
         Flip();
     }
@@ -43,12 +45,20 @@ public class PlayerMovingController : MonoBehaviour
         float minValue = 0f;
         float mirrorPositionValue = -1f;
 
-        if (_isFacingRight && _inputReader.HorizontalInput < minValue || !_isFacingRight && _inputReader.HorizontalInput > minValue)
+        if (_isFacingRight && _inputReader.HorizontalInput < minValue || _isFacingRight == false && _inputReader.HorizontalInput > minValue)
         {
             _isFacingRight = !_isFacingRight;
             Vector3 localScale = _visual.localScale;
             localScale.x *= mirrorPositionValue;
             _visual.localScale = localScale;
+        }
+    }
+
+    private void Jump()
+    {
+        if (_collisionDetector.IsGrounded)
+        {
+            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _jumpPower);
         }
     }
 }
